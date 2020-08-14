@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <title>C'est quand le prochain jour férié?</title>
+        <script lang="javascript">
+            if(window.fetch){
+
+            fetch('https://calendrier.api.gouv.fr/jours-feries/metropole/2020.json').then(response => {return response.json()})
+                .then((response) => {
+                    let prochainjJourFerie
+                    for (ligne in response) {
+                        const aujourdhui = new Date()
+                        if (new Date(ligne) > aujourdhui) {
+                            prochainjJourFerie = new Date(ligne).toLocaleDateString('fr-FR', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            }) + ", (" + response[ligne] + ")."
+                            break;
+                        }
+                    }
+                    document.getElementById('prochainJourFerie').innerHTML = "Le " + prochainjJourFerie
+                })
+            } else {
+                document.getElementById('prochainJourFerie').innerHTML = "Vous devriez mettre à jour votre navigateur."
+            }
+        </script>
+    </head>
+    <body style="height: 900px; background-color: #1e1e1e;">
+        <h1
+            id="prochainJourFerie"
+            style="font-family: 'Tahoma'; color:#a9b7c6;
+            position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+            "
+        ></h1>
+    </body>
+</html>
