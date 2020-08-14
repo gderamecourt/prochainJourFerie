@@ -1,7 +1,0 @@
-# prochainJourFerie
-
-## Description
-
-## Technologies
-
-## Inspiration
