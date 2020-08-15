@@ -1,44 +1,60 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8" />
-        <title>C'est quand le prochain jour férié?</title>
-        <script lang="javascript">
-            if(window.fetch){
 
-            fetch('https://calendrier.api.gouv.fr/jours-feries/metropole/2020.json').then(response => {return response.json()})
+<head>
+    <meta charset="utf-8" />
+    <title>C'est quand le prochain jour férié?</title>
+    <script lang="javascript">
+        if (window.fetch) {
+            fetch(`https://calendrier.api.gouv.fr/jours-feries/metropole/${new Date().getFullYear()}.json`).then(response => { return response.json() })
                 .then((response) => {
-                    let prochainjJourFerie
+                    let dateProchainjJourFerie
+                    let nomProchainJourFerie
                     for (ligne in response) {
                         const aujourdhui = new Date()
                         if (new Date(ligne) > aujourdhui) {
-                            prochainjJourFerie = new Date(ligne).toLocaleDateString('fr-FR', {
+                            dateProchainjJourFerie = new Date(ligne).toLocaleDateString('fr-FR', {
                                 weekday: 'long',
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
-                            }) + ", (" + response[ligne] + ")."
+                            })
+                            nomProchainJourFerie = response[ligne]
                             break;
                         }
                     }
-                    document.getElementById('prochainJourFerie').innerHTML = "Le " + prochainjJourFerie
+                    document.getElementById('dateProchainJourFerie').innerHTML = "Le " + dateProchainjJourFerie
+                    document.getElementById('nomProchainJourFerie').innerHTML = nomProchainJourFerie
+                    document.getElementById('nomProchainJourFerie').href = "https://fr.wikipedia.org/wiki/" + nomProchainJourFerie
                 })
-            } else {
-                document.getElementById('prochainJourFerie').innerHTML = "Vous devriez mettre à jour votre navigateur."
-            }
-        </script>
-    </head>
-    <body style="height: 900px; background-color: #1e1e1e;">
-        <h1
-            id="prochainJourFerie"
-            style="
-                font-family: 'Tahoma';
-                color: #a9b7c6;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            "
-        ></h1>
-    </body>
+        } else {
+            document.getElementById('dateProchainJourFerie').innerHTML = "Vous devriez mettre à jour votre navigateur."
+        }
+    </script>
+    <style>
+        .centerOnScreen {
+            font-family: 'Tahoma';
+            font-size: xx-large;
+            color: #a9b7c6;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        a {
+            color: #a9b7c6;
+        }
+    </style>
+</head>
+
+<body style="height: 900px; background-color: #1e1e1e;">
+    <p class="centerOnScreen">
+        <span id="dateProchainJourFerie"></span>
+        <br />
+        <a id="nomProchainJourFerie"></a>
+    </p>
+</body>
+
 </html>
